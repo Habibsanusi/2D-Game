@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import javax.swing.JPanel;
 
+import entity.Player;
+
 // this game panel works kinda like a game screen.
 public class GamePanel extends JPanel implements Runnable{
 	
@@ -13,7 +15,7 @@ public class GamePanel extends JPanel implements Runnable{
 	final int originalTilesize = 16; // 16x16 tile means thats going to be the size of player characters, npcs, map tiles.
 	final int scale = 3; //this is to scale the tile size as it would be to small for modern day computer screens
 	
-	final int tileSize = originalTilesize * scale; // now the tile size has been scaled to be 48x48 which a lot bigger and clearer.
+	public final int tileSize = originalTilesize * scale; // now the tile size has been scaled to be 48x48 which a lot bigger and clearer.
 	
 	// now you have to determine how many tiles can be displayed on a single screen, Horizontally and Vertically 
 	final int maxScreenCol = 16;  // so 16 tiles across "Horizontally"
@@ -26,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread; // this the game clock, keeps the game running at a certain speed(fps) keeps refreshing the screen at given time
-	
+	Player player = new Player(this,keyH);
 	
 	int playerX = 100;
 	int playerY = 100;
@@ -96,32 +98,18 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void update() {
 		
-		// changing the player position
-		if(keyH.upPressed == true) {
-			playerY -= playerSpeed;
-		}
-		else if(keyH.downPressed == true) {
-			playerY += playerSpeed;	
-		}
-		else if(keyH.leftPressed == true) {
-			playerX -= playerSpeed;
-		}
-		else if(keyH.rightPressed == true){
-			playerX += playerSpeed;
-		}
+		player.update();
+		
 	}
 	
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
 		
-		// Now this is where we are going to draw something onto the screen
 		
-		Graphics2D g2 = (Graphics2D)g;  // we are converting the (Graphics g) into a 2d class
+		Graphics2D g2 = (Graphics2D)g;  
 		
-		g2.setColor(Color.white);
-		
-		g2.fillRect(playerX, playerY, tileSize, tileSize);
+		player.draw(g2);
 		
 		g2.dispose();
 	}
