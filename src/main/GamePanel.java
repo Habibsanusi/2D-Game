@@ -7,6 +7,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 import entity.Player;
+import tile.TileManager;
 
 // this game panel works kinda like a game screen.
 public class GamePanel extends JPanel implements Runnable{
@@ -18,21 +19,20 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int tileSize = originalTilesize * scale; // now the tile size has been scaled to be 48x48 which a lot bigger and clearer.
 	
 	// now you have to determine how many tiles can be displayed on a single screen, Horizontally and Vertically 
-	final int maxScreenCol = 16;  // so 16 tiles across "Horizontally"
-	final int maxScreenRow = 12; // and 12 tiles down "Vertically"
-	final int screenWidth = tileSize * maxScreenCol; // this will be 48*16 = 768 pixels 
-	final int screenHeight = tileSize * maxScreenRow; // this will be 48*12 = 576 pixels
+	public final int maxScreenCol = 16;  // so 16 tiles across "Horizontally"
+	public final int maxScreenRow = 12; // and 12 tiles down "Vertically"
+	public final int screenWidth = tileSize * maxScreenCol; // this will be 48*16 = 768 pixels 
+	public final int screenHeight = tileSize * maxScreenRow; // this will be 48*12 = 576 pixels
 	
 	// Fps
 	int FPS = 60;
 	
+	TileManager tileM = new TileManager(this);
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread; // this the game clock, keeps the game running at a certain speed(fps) keeps refreshing the screen at given time
 	Player player = new Player(this,keyH);
 	
-	int playerX = 100;
-	int playerY = 100;
-	int playerSpeed = 4;
+	
 	
 	public GamePanel() {
 		
@@ -106,8 +106,9 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		super.paintComponent(g);
 		
-		
 		Graphics2D g2 = (Graphics2D)g;  
+		
+		tileM.draw(g2);
 		
 		player.draw(g2);
 		
